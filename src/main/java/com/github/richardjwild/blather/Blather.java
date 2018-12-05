@@ -46,7 +46,7 @@ public class Blather {
         }
     }
 
-    private static DataSource newMySQLDataSource() {
+    public static DataSource newMySQLDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/blather?user=root&password=password");

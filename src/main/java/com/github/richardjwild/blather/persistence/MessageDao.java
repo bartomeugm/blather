@@ -1,39 +1,38 @@
 package com.github.richardjwild.blather.persistence;
 
 
-import com.github.richardjwild.blather.message.Message;
+import com.github.richardjwild.blather.Blather;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
+import javax.sql.DataSource;
 import java.sql.*;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
+import org.springframework.jdbc.core.ResultSetExtractor;
 
 public class MessageDao {
-    private final Connection connection;
+    private Connection connection;
+    private DataSource dataSource;
 
     public MessageDao(Connection connection) {
 
         this.connection = connection;
     }
 
+    public MessageDao(DataSource dataSource){
+        this.dataSource = dataSource;
+    }
+
     public List<MessageDto> getMessagesFor(String userName) {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        List<MessageDto> messages = new ArrayList<>();
-        try {
-            statement = connection.prepareStatement("SELECT recipient, text, post_time FROM messages WHERE recipient = ?");
-            statement.setString(1, userName);
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                String recipient = resultSet.getString(1);
-                String text = resultSet.getString(2);
-                Timestamp timestamp = resultSet.getTimestamp(3);
-                messages.add(new MessageDto(recipient, text, timestamp));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return messages;
+            String sql = "SELECT recipient, text, post_time FROM messages WHERE recipient = ?";
+            JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+
+        RowMapper<MessageDto> messageDtoRowMapper = (rs, rowNum) -> new MessageDto(
+                    rs.getString("recipient"),
+                    rs.getString("text"),
+                    rs.getTimestamp("post_time"));
+
+        return jdbcTemplate.query(sql, new Object[]{userName}, messageDtoRowMapper);
     }
 
     public void postMessage(MessageDto messageDto) {
@@ -46,5 +45,15 @@ public class MessageDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        DataSource dataSource = Blather.newMySQLDataSource();
+        MessageDao messageDao = new MessageDao(dataSource);
+
+        List<MessageDto> testuser = messageDao.getMessagesFor("testuser");
+
+        testuser.forEach(System.out::println);
+
     }
 }
