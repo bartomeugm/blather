@@ -1,4 +1,14 @@
-
+buildscript {
+    ext {
+        springBootVersion = '2.1.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
 
 plugins {
     id 'java-gradle-plugin'
@@ -9,6 +19,10 @@ repositories {
     mavenCentral()
 }
 
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
 dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.44'
@@ -16,6 +30,8 @@ dependencies {
     testCompile group: 'org.easytesting', name: 'fest-assert', version: '1.4'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '1.1.0'
+    implementation('org.springframework.boot:spring-boot-starter-jdbc')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
 jar {
@@ -38,3 +54,4 @@ flyway {
     user = 'root'
     password = 'password'
 }
+
