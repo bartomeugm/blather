@@ -1,21 +1,33 @@
 package com.github.richardjwild.blather.persistence;
 
+import com.github.richardjwild.blather.Blather;
 import com.github.richardjwild.blather.user.User;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 
+import javax.sql.DataSource;
 import javax.swing.*;
 import java.sql.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class FollowersDao {
     private Connection connection;
+    private DataSource dataSource;
 
     public FollowersDao(Connection connection) {
 
         this.connection = connection;
     }
 
-    public void saveFollowees(String follower, Set<User> followees)  {
+    public FollowersDao(DataSource dataSource) {
+
+        this.dataSource = dataSource;
+    }
+
+    public void saveFollowees(String follower, Set<User> followees) {
         try {
             connection.setAutoCommit(false);
             deleteFollowees(follower);
@@ -55,21 +67,22 @@ public class FollowersDao {
     }
 
     public Set<String> getFollowees(String follower) {
-        PreparedStatement statement = null;
-        ResultSet results = null;
-        Set<String> followees = new HashSet<>();
+        String sql = "SELECT followee FROM followers WHERE follower = ?";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-        try {
-            statement = connection.prepareStatement(
-                    "SELECT followee FROM followers WHERE follower = ?");
-            statement.setString(1, follower);
-            results = statement.executeQuery();
-            while (results.next())
-                followees.add(results.getString(1));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        RowMapper<String> followeeRowMapper = (rs, rowNum)->
+                rs.getString("followee");
 
-        return followees;
+        List<String> followees = jdbcTemplate.query(sql, new Object[]{follower}, followeeRowMapper);
+        return new HashSet<>(followees);
+    }
+
+    public static void main(String[] args) {
+        DataSource dataSource = Blather.newMySQLDataSource();
+        FollowersDao followersDao = new FollowersDao(dataSource);
+
+        Set<String> followees = followersDao.getFollowees("testuser");
+
+        followees.forEach(System.out::println);
     }
 }
