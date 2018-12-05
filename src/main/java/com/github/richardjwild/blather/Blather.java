@@ -7,58 +7,23 @@ import com.github.richardjwild.blather.io.ConsoleOutput;
 import com.github.richardjwild.blather.persistence.*;
 import com.github.richardjwild.blather.time.SystemClock;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+
+import static com.github.richardjwild.blather.persistence.DataSourceHelper.newMySQLDataSource;
+import static com.github.richardjwild.blather.persistence.DataSourceHelper.transactionManager;
 
 public class Blather {
 
     public static void main(String[] args) {
-        Connection connection = newMySQLConnection();
         DataSource dataSource = newMySQLDataSource();
         DataSourceTransactionManager transactionManager = transactionManager(dataSource);
         Application application = ApplicationBuilder.build(new ConsoleInput(),
                 new ConsoleOutput(),
                 new SystemClock(),
-                new MySqlUserRepository(new UserDao(dataSource), new FollowersDao(dataSource,transactionManager)),
+                new MySqlUserRepository(new UserDao(dataSource), new FollowersDao(dataSource, transactionManager)),
                 new MySqlMessageRepository(new MessageDao(dataSource)));
         application.run();
-        closeConnection(connection);
     }
 
-    private static void closeConnection(Connection connection) {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Could not close SQL connection: " + e);
-        }
-    }
-
-    private static Connection newMySQLConnection() {
-        try {
-            return DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/blather" +
-                    "?user=root&password=password");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Cannot begin SQL: " + e.getMessage());
-        }
-    }
-
-    private static DataSource newMySQLDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/blather?user=root&password=password");
-        dataSource.setUsername("root");
-        dataSource.setPassword("password");
-        return dataSource;
-    }
-
-    private static DataSourceTransactionManager transactionManager(DataSource dataSource){
-        return new DataSourceTransactionManager(dataSource);
-    }
 }
