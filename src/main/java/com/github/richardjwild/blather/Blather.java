@@ -6,6 +6,7 @@ import com.github.richardjwild.blather.io.ConsoleInput;
 import com.github.richardjwild.blather.io.ConsoleOutput;
 import com.github.richardjwild.blather.persistence.*;
 import com.github.richardjwild.blather.time.SystemClock;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
@@ -18,10 +19,12 @@ public class Blather {
     public static void main(String[] args) {
         Connection connection = newMySQLConnection();
         DataSource dataSource = newMySQLDataSource();
+        DataSourceTransactionManager transactionManager = transactionManager(dataSource);
         Application application = ApplicationBuilder.build(new ConsoleInput(),
                 new ConsoleOutput(),
                 new SystemClock(),
-                new MySqlUserRepository(new UserDao(dataSource), new FollowersDao(connection)), new MySqlMessageRepository(new MessageDao(dataSource)));
+                new MySqlUserRepository(new UserDao(dataSource), new FollowersDao(dataSource,transactionManager)),
+                new MySqlMessageRepository(new MessageDao(dataSource)));
         application.run();
         closeConnection(connection);
     }
@@ -46,12 +49,16 @@ public class Blather {
         }
     }
 
-    public static DataSource newMySQLDataSource() {
+    private static DataSource newMySQLDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/blather?user=root&password=password");
         dataSource.setUsername("root");
         dataSource.setPassword("password");
         return dataSource;
+    }
+
+    private static DataSourceTransactionManager transactionManager(DataSource dataSource){
+        return new DataSourceTransactionManager(dataSource);
     }
 }
