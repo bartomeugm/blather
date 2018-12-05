@@ -23,7 +23,7 @@ public class UserDao {
     }
 
     public String findUser(String name) {
-        try {
+       try {
             JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
             return jdbcTemplate.queryForObject("SELECT name FROM users WHERE name = ?", String.class, name);
         } catch (EmptyResultDataAccessException emptyResultDataAccessException){
