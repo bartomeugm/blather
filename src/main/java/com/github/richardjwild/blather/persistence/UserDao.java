@@ -24,15 +24,8 @@ public class UserDao {
     }
 
     public void saveUser(String name) {
-        PreparedStatement statement;
-        try {
-            statement = connection.prepareStatement("INSERT INTO users VALUES (?)");
-            statement.setString(1, name);
-            statement.execute();
-        } catch (SQLException e) {
-            System.err.println("Saveuser failed: " + e.getMessage());
-            e.printStackTrace();
-        }
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate.update("INSERT INTO users values(?)", name);
     }
 
     public String findUser(String name) {
@@ -51,6 +44,9 @@ public class UserDao {
         // Inject the datasource into the dao
         UserDao dao = new UserDao(dataSource);
         String username = dao.findUser("testuser");
-        System.out.println("Username: " + username);
+
+        String insertedUser = "inserted_user";
+        dao.saveUser(insertedUser);
+        System.out.println("Username: " + dao.findUser(insertedUser));
     }
 }
