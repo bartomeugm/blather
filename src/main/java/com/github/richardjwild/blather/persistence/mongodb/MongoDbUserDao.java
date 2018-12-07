@@ -1,10 +1,7 @@
 package com.github.richardjwild.blather.persistence.mongodb;
 
 import com.github.richardjwild.blather.persistence.UserDao;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 import static com.mongodb.client.model.Filters.eq;
