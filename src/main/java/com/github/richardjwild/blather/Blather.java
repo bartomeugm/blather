@@ -5,6 +5,10 @@ import com.github.richardjwild.blather.application.ApplicationBuilder;
 import com.github.richardjwild.blather.io.ConsoleInput;
 import com.github.richardjwild.blather.io.ConsoleOutput;
 import com.github.richardjwild.blather.persistence.*;
+import com.github.richardjwild.blather.persistence.mysql.MySqlFollowersDao;
+import com.github.richardjwild.blather.persistence.mysql.MySqlMessageRepository;
+import com.github.richardjwild.blather.persistence.mysql.MySqlUserDao;
+import com.github.richardjwild.blather.persistence.mysql.MySqlUserRepository;
 import com.github.richardjwild.blather.time.SystemClock;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -21,7 +25,7 @@ public class Blather {
         Application application = ApplicationBuilder.build(new ConsoleInput(),
                 new ConsoleOutput(),
                 new SystemClock(),
-                new MySqlUserRepository(new UserDao(dataSource), new FollowersDao(dataSource, transactionManager)),
+                new MySqlUserRepository(new MySqlUserDao(dataSource), new MySqlFollowersDao(dataSource, transactionManager)),
                 new MySqlMessageRepository(new MessageDao(dataSource)));
         application.run();
     }

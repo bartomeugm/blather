@@ -1,7 +1,8 @@
-package com.github.richardjwild.blather.persistence;
+package com.github.richardjwild.blather.persistence.mysql;
 
 import com.github.richardjwild.blather.message.Message;
 import com.github.richardjwild.blather.message.MessageRepository;
+import com.github.richardjwild.blather.persistence.MessageDao;
 import com.github.richardjwild.blather.user.User;
 
 import java.util.stream.Stream;

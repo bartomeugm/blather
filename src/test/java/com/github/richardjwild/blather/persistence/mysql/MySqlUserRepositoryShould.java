@@ -1,5 +1,10 @@
-package com.github.richardjwild.blather.persistence;
+package com.github.richardjwild.blather.persistence.mysql;
 
+import com.github.richardjwild.blather.persistence.FollowersDao;
+import com.github.richardjwild.blather.persistence.UserDao;
+import com.github.richardjwild.blather.persistence.mysql.MySqlFollowersDao;
+import com.github.richardjwild.blather.persistence.mysql.MySqlUserDao;
+import com.github.richardjwild.blather.persistence.mysql.MySqlUserRepository;
 import com.github.richardjwild.blather.user.User;
 import com.github.richardjwild.blather.user.UserRepository;
 import org.junit.Before;
@@ -18,8 +23,8 @@ public class MySqlUserRepositoryShould {
 
     @Before
     public void setUp() {
-        userDao = mock(UserDao.class);
-        followersDao = mock(FollowersDao.class);
+        userDao = mock(MySqlUserDao.class);
+        followersDao = mock(MySqlFollowersDao.class);
         userRepository = new MySqlUserRepository(userDao, followersDao);
     }
 

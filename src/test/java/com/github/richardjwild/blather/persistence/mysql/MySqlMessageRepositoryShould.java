@@ -1,7 +1,10 @@
-package com.github.richardjwild.blather.persistence;
+package com.github.richardjwild.blather.persistence.mysql;
 
 import com.github.richardjwild.blather.message.Message;
 import com.github.richardjwild.blather.message.MessageRepository;
+import com.github.richardjwild.blather.persistence.MessageDao;
+import com.github.richardjwild.blather.persistence.MessageDto;
+import com.github.richardjwild.blather.persistence.mysql.MySqlMessageRepository;
 import com.github.richardjwild.blather.user.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,8 +12,6 @@ import org.junit.Test;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
