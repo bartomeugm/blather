@@ -49,7 +49,6 @@ public class MongoDbUserRepositoryShould {
     }
 
     @Test
-    @Ignore
     public void retrieve_user_when_it_exists() {
         String userName = "will_be_found";
         User expectedUser = new User(userName);
