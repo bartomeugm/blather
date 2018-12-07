@@ -4,7 +4,6 @@ import com.github.richardjwild.blather.message.Message;
 import com.github.richardjwild.blather.message.MessageRepository;
 import com.github.richardjwild.blather.persistence.MessageDao;
 import com.github.richardjwild.blather.persistence.MessageDto;
-import com.github.richardjwild.blather.persistence.mysql.MySqlMessageRepository;
 import com.github.richardjwild.blather.user.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,11 +14,8 @@ import java.util.Collections;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
-import static junit.framework.TestCase.assertTrue;
 import static org.gradle.internal.impldep.org.testng.AssertJUnit.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class MySqlMessageRepositoryShould {
 
@@ -29,7 +25,7 @@ public class MySqlMessageRepositoryShould {
 
     @Before
     public void setUp() {
-        messageDao = mock(MessageDao.class);
+        messageDao = mock(MySqlMessageDao.class);
         repository = new MySqlMessageRepository(messageDao);
     }
 

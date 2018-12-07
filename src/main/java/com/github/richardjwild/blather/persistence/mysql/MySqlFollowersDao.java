@@ -12,13 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.sql.DataSource;
-import java.sql.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class MySqlFollowersDao implements FollowersDao {
-    private Connection connection;
     private DataSource dataSource;
     private DataSourceTransactionManager transactionManager;
 

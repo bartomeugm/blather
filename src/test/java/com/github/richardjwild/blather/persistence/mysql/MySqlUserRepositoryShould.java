@@ -2,9 +2,6 @@ package com.github.richardjwild.blather.persistence.mysql;
 
 import com.github.richardjwild.blather.persistence.FollowersDao;
 import com.github.richardjwild.blather.persistence.UserDao;
-import com.github.richardjwild.blather.persistence.mysql.MySqlFollowersDao;
-import com.github.richardjwild.blather.persistence.mysql.MySqlUserDao;
-import com.github.richardjwild.blather.persistence.mysql.MySqlUserRepository;
 import com.github.richardjwild.blather.user.User;
 import com.github.richardjwild.blather.user.UserRepository;
 import org.junit.Before;

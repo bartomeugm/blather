@@ -2,13 +2,9 @@ package com.github.richardjwild.blather.persistence.mongodb;
 
 import com.github.richardjwild.blather.persistence.FollowersDao;
 import com.github.richardjwild.blather.persistence.UserDao;
-import com.github.richardjwild.blather.persistence.mongodb.MongoDbFollowersDao;
-import com.github.richardjwild.blather.persistence.mongodb.MongoDbUserDao;
-import com.github.richardjwild.blather.persistence.mongodb.MongoDbUserRepository;
 import com.github.richardjwild.blather.user.User;
 import com.github.richardjwild.blather.user.UserRepository;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Optional;
