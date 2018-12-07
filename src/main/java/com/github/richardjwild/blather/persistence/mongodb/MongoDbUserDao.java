@@ -19,7 +19,9 @@ public class MongoDbUserDao implements UserDao {
 
     @Override
     public void saveUser(String name) {
-
+        Document user = new Document()
+                .append("name", name);
+        users.insertOne(user);
     }
 
     @Override
@@ -27,16 +29,5 @@ public class MongoDbUserDao implements UserDao {
         Document user = users.find(eq("name", name)).first();
         if (user == null) return null;
         return user.getString("name");
-    }
-
-    public static void main(String[] args) {
-        MongoClient mongoClient = MongoClients.create();
-        MongoDatabase database = mongoClient.getDatabase("blather");
-        MongoCollection<Document> users = database.getCollection("users");
-        MongoDbUserDao userDao = new MongoDbUserDao(users);
-
-        String username = userDao.findUser("testuser");
-
-        System.out.println("Username: " + username);
     }
 }
