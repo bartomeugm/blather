@@ -36,7 +36,6 @@ public class MongoDbUserRepositoryShould {
     }
 
     @Test
-    @Ignore
     public void tell_dao_to_save_user() {
         String userName = "will_be_found";
         User expectedUser = new User(userName);

@@ -35,6 +35,10 @@ public class MongoDbUserRepository implements UserRepository {
 
     @Override
     public void save(User user) {
+        String name = user.name();
+        Set<User> followees = user.followees();
 
+        userDao.saveUser(name);
+        followersDao.saveFollowees(name, followees);
     }
 }
